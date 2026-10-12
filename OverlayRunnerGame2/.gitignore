@@ -13,3 +13,11 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Ondertekeningssleutels horen nooit in git
+*.jks
+*.keystore
+keystore.properties
+
+# Nieuwe Gradle-map
+.kotlin

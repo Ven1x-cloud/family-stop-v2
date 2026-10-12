@@ -1,54 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="30dp"
-    android:background="#121212">
+    android:background="@color/fs_scherm"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="false">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="FAMILY STOP SETUP"
-        android:textSize="28sp"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:layout_marginBottom="10dp"/>
+        android:orientation="vertical"
+        android:paddingLeft="24dp"
+        android:paddingTop="32dp"
+        android:paddingRight="24dp"
+        android:paddingBottom="32dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Zet alle opties aan (Groen) om de hack te laten werken."
-        android:textSize="14sp"
-        android:textColor="#AAAAAA"
-        android:gravity="center"
-        android:layout_marginBottom="40dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fs_titel"
+            android:textColor="@color/fs_tekst"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/btn_overlay"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:text="1. ACTIVEER OVERLAY"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:layout_marginBottom="20dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="28dp"
+            android:lineSpacingMultiplier="1.2"
+            android:text="@string/setup_uitleg"
+            android:textColor="@color/fs_tekst_dim"
+            android:textSize="14sp" />
 
-    <Button
-        android:id="@+id/btn_toegankelijkheid"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:text="2. ACTIVEER SNELTOETS"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:layout_marginBottom="20dp"/>
+        <TextView
+            android:id="@+id/stap_overlay"
+            style="@style/StapKnop" />
 
-    <Button
-        android:id="@+id/btn_kluis"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:text="3. BOUW DE KLUIS (Veilige Map)"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/stap_toegankelijkheid"
+            style="@style/StapKnop" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/stap_kluis"
+            style="@style/StapKnop" />
+
+        <TextView
+            android:id="@+id/samenvatting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:textColor="@color/fs_tekst_dim"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/restricted_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:lineSpacingMultiplier="1.25"
+            android:padding="14dp"
+            android:text="@string/setup_restricted"
+            android:textColor="@color/fs_tekst_dim"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+</ScrollView>

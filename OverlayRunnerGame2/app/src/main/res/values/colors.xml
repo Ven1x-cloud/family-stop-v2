@@ -2,4 +2,27 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- ============ Family Stop palet ============ -->
+    <!-- Achtergrond van de setup-pagina -->
+    <color name="fs_scherm">#FF0E0E14</color>
+    <!-- De ronde kaart van het zwevende paneel -->
+    <color name="fs_surface">#F2171721</color>
+    <!-- Verhoogde vlakken: knoppen, adresbalk, toetsen -->
+    <color name="fs_surface_hoog">#FF262634</color>
+    <color name="fs_surface_hoog2">#FF34344A</color>
+    <!-- Dun randje om kaarten en balken -->
+    <color name="fs_rand">#2EFFFFFF</color>
+    <color name="fs_tekst">#FFF4F4F7</color>
+    <color name="fs_tekst_dim">#FF9C9CB0</color>
+    <color name="fs_primair">#FF6D5DFB</color>
+    <color name="fs_succes">#FF22C55E</color>
+    <color name="fs_waarschuwing">#FFFB923C</color>
+    <color name="fs_gevaar">#FFEF4444</color>
+    <!-- Stap nog niet gedaan -->
+    <color name="fs_uit">#FF3A3A4C</color>
+    <!-- Achtergrond van het volledige-scherm paneel -->
+    <color name="fs_scrim">#F50B0B12</color>
+    <!-- Toetsenbord-balk -->
+    <color name="fs_toetsenbord">#F00E0E16</color>
 </resources>

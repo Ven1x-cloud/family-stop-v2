@@ -1,66 +1,83 @@
 package com.example.overlayrunnergame;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 
+/**
+ * De setup-pagina. Hier zet je de drie dingen aan die het paneel nodig heeft,
+ * met per stap een duidelijke kleur: grijs = nog doen, groen = klaar.
+ */
 public class MainActivity extends Activity {
 
-    private Button btnOverlay;
-    private Button btnToegankelijkheid;
-    private Button btnKluis;
+    private static final String KLUIS_PAKKET = "com.samsung.knox.securefolder";
+
+    private TextView stapOverlay;
+    private TextView stapToegankelijkheid;
+    private TextView stapKluis;
+    private TextView samenvatting;
+    private TextView restrictedHint;
+
+    private GradientDrawable vormOverlay;
+    private GradientDrawable vormToegankelijkheid;
+    private GradientDrawable vormKluis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnOverlay = findViewById(R.id.btn_overlay);
-        btnToegankelijkheid = findViewById(R.id.btn_toegankelijkheid);
-        btnKluis = findViewById(R.id.btn_kluis);
+        stapOverlay = findViewById(R.id.stap_overlay);
+        stapToegankelijkheid = findViewById(R.id.stap_toegankelijkheid);
+        stapKluis = findViewById(R.id.stap_kluis);
+        samenvatting = findViewById(R.id.samenvatting);
+        restrictedHint = findViewById(R.id.restricted_hint);
 
-        btnOverlay.setOnClickListener(new View.OnClickListener() {
+        vormOverlay = maakStapKnop(stapOverlay, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!Settings.canDrawOverlays(MainActivity.this)) {
-                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    try {
+                        startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                Uri.parse("package:" + getPackageName())));
+                    } catch (Exception e) {
+                        startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION));
+                    }
+                }
+            }
+        });
+
+        vormToegankelijkheid = maakStapKnop(stapToegankelijkheid, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+            }
+        });
+
+        vormKluis = maakStapKnop(stapKluis, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openKluis();
+            }
+        });
+
+        restrictedHint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                             Uri.parse("package:" + getPackageName()));
                     startActivity(intent);
-                }
-            }
-        });
-
-        btnToegankelijkheid.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isAccessibilityServiceEnabled(MainActivity.this)) {
-                    Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                    startActivity(intent);
-                }
-            }
-        });
-
-        btnKluis.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isVeiligeMapAanwezig()) {
-                    try {
-                        Intent intent = getPackageManager().getLaunchIntentForPackage("com.samsung.knox.securefolder");
-                        if (intent != null) {
-                            startActivity(intent);
-                        } else {
-                            startActivity(new Intent(Settings.ACTION_SECURITY_SETTINGS));
-                        }
-                    } catch (Exception e) {
-                        startActivity(new Intent(Settings.ACTION_SECURITY_SETTINGS));
-                    }
+                } catch (Exception e) {
+                    startActivity(new Intent(Settings.ACTION_SETTINGS));
                 }
             }
         });
@@ -72,60 +89,87 @@ public class MainActivity extends Activity {
         checkMachtigingen();
     }
 
+    /**
+     * Geeft de knop een ronde vorm met tik-rimpel en onthoudt de vorm, zodat we
+     * de kleur later kunnen omzetten zonder de ronde hoeken kwijt te raken.
+     */
+    private GradientDrawable maakStapKnop(TextView knop, View.OnClickListener actie) {
+        GradientDrawable vorm = Ui.vorm(this, Ui.kleur(this, R.color.fs_uit), 20f);
+        knop.setBackground(Ui.tikbaar(this, vorm, 20f));
+        knop.setPadding(Ui.px(this, 20), 0, Ui.px(this, 20), 0);
+        knop.setFocusable(true);
+        knop.setOnClickListener(actie);
+        return vorm;
+    }
+
     private void checkMachtigingen() {
-        if (Settings.canDrawOverlays(this)) {
-            btnOverlay.setBackgroundColor(Color.parseColor("#4CAF50")); 
-            btnOverlay.setText("1. OVERLAY (AAN)");
-        } else {
-            btnOverlay.setBackgroundColor(Color.parseColor("#F44336")); 
-            btnOverlay.setText("1. ACTIVEER OVERLAY");
-        }
+        boolean overlay = Settings.canDrawOverlays(this);
+        boolean toegankelijkheid = isToegankelijkheidAan(this);
+        boolean kluis = isKluisAanwezig();
 
-        if (isAccessibilityServiceEnabled(this)) {
-            btnToegankelijkheid.setBackgroundColor(Color.parseColor("#4CAF50")); 
-            btnToegankelijkheid.setText("2. SNELTOETS (AAN)");
-        } else {
-            btnToegankelijkheid.setBackgroundColor(Color.parseColor("#F44336")); 
-            btnToegankelijkheid.setText("2. ACTIVEER SNELTOETS");
-        }
+        zetStap(stapOverlay, vormOverlay, overlay, "1", getString(R.string.stap_overlay));
+        zetStap(stapToegankelijkheid, vormToegankelijkheid, toegankelijkheid, "2",
+                getString(R.string.stap_toegankelijkheid));
+        zetStap(stapKluis, vormKluis, kluis, "3", getString(R.string.stap_kluis));
 
-        if (isVeiligeMapAanwezig()) {
-            btnKluis.setBackgroundColor(Color.parseColor("#4CAF50")); 
-            btnKluis.setText("3. KLUIS GEBOUWD (AAN)");
-        } else {
-            btnKluis.setBackgroundColor(Color.parseColor("#F44336")); 
-            btnKluis.setText("3. BOUW DE KLUIS (Veilige Map)");
+        int klaar = (overlay ? 1 : 0) + (toegankelijkheid ? 1 : 0) + (kluis ? 1 : 0);
+        samenvatting.setText(getString(R.string.samenvatting, klaar));
+    }
+
+    private void zetStap(TextView knop, GradientDrawable vorm, boolean aan,
+                         String nummer, String tekst) {
+        vorm.setColor(Ui.kleur(this, aan ? R.color.fs_succes : R.color.fs_uit));
+        knop.setText(aan ? "✓  " + tekst : nummer + ".  " + tekst);
+    }
+
+    private void openKluis() {
+        try {
+            Intent intent = getPackageManager().getLaunchIntentForPackage(KLUIS_PAKKET);
+            if (intent != null) {
+                startActivity(intent);
+            } else {
+                startActivity(new Intent(Settings.ACTION_SECURITY_SETTINGS));
+            }
+        } catch (Exception e) {
+            try {
+                startActivity(new Intent(Settings.ACTION_SECURITY_SETTINGS));
+            } catch (Exception ignored) {
+                // niets meer aan te doen
+            }
         }
     }
 
-    private boolean isVeiligeMapAanwezig() {
+    private boolean isKluisAanwezig() {
         try {
-            getPackageManager().getPackageInfo("com.samsung.knox.securefolder", 0);
+            getPackageManager().getPackageInfo(KLUIS_PAKKET, 0);
             return true;
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
     }
 
-    private boolean isAccessibilityServiceEnabled(Context context) {
+    private boolean isToegankelijkheidAan(Context context) {
         String service = getPackageName() + "/" + MijnService.class.getCanonicalName();
-        int accessibilityEnabled = 0;
+        int toegankelijkheidAan;
         try {
-            accessibilityEnabled = Settings.Secure.getInt(context.getContentResolver(), android.provider.Settings.Secure.ACCESSIBILITY_ENABLED);
+            toegankelijkheidAan = Settings.Secure.getInt(context.getContentResolver(),
+                    Settings.Secure.ACCESSIBILITY_ENABLED);
         } catch (Settings.SettingNotFoundException e) {
             return false;
         }
-        TextUtils.SimpleStringSplitter colonSplitter = new TextUtils.SimpleStringSplitter(':');
-        if (accessibilityEnabled == 1) {
-            String settingValue = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
-            if (settingValue != null) {
-                colonSplitter.setString(settingValue);
-                while (colonSplitter.hasNext()) {
-                    String accessibilityService = colonSplitter.next();
-                    if (accessibilityService.equalsIgnoreCase(service)) {
-                        return true;
-                    }
-                }
+        if (toegankelijkheidAan != 1) {
+            return false;
+        }
+        String lijst = Settings.Secure.getString(context.getContentResolver(),
+                Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+        if (lijst == null) {
+            return false;
+        }
+        TextUtils.SimpleStringSplitter splitter = new TextUtils.SimpleStringSplitter(':');
+        splitter.setString(lijst);
+        while (splitter.hasNext()) {
+            if (splitter.next().equalsIgnoreCase(service)) {
+                return true;
             }
         }
         return false;
