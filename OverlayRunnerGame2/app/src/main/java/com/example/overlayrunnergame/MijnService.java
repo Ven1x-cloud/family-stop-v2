@@ -26,6 +26,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,6 +75,7 @@ public class MijnService extends AccessibilityService {
 
     // ------------------------------------------------------------- de schermen
     private TextView titel;
+    private ImageView logo;
     private LinearLayout schermMenu;
     private FrameLayout schermBrowser;
     private LinearLayout schermEditor;
@@ -313,6 +315,8 @@ public class MijnService extends AccessibilityService {
         toetsenbordHouder = null;
         zwever = null;
         miniMenu = null;
+        logo = null;
+        titel = null;
         toetsenbordZichtbaar = false;
     }
 
@@ -372,6 +376,17 @@ public class MijnService extends AccessibilityService {
                 FrameLayout.LayoutParams.WRAP_CONTENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT,
                 Gravity.CENTER));
+
+        // Het logo boven de titel. Een VectorDrawable werkt ook in een service,
+        // want die heeft geen thema nodig.
+        logo = new ImageView(this);
+        logo.setImageResource(R.drawable.familystop_logo);
+        logo.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        int logoMaat = Ui.px(this, 62);
+        LinearLayout.LayoutParams logoParams = new LinearLayout.LayoutParams(logoMaat, logoMaat);
+        logoParams.gravity = Gravity.CENTER_HORIZONTAL;
+        logoParams.bottomMargin = Ui.px(this, 6);
+        paneel.addView(logo, logoParams);
 
         titel = new TextView(this);
         titel.setText(R.string.fs_titel);
@@ -864,8 +879,12 @@ public class MijnService extends AccessibilityService {
         schermMenu.setVisibility(welk == SCHERM_MENU ? View.VISIBLE : View.GONE);
         schermBrowser.setVisibility(welk == SCHERM_BROWSER ? View.VISIBLE : View.GONE);
         schermEditor.setVisibility(welk == SCHERM_EDITOR ? View.VISIBLE : View.GONE);
+        int menuZichtbaar = welk == SCHERM_MENU ? View.VISIBLE : View.GONE;
         if (titel != null) {
-            titel.setVisibility(welk == SCHERM_MENU ? View.VISIBLE : View.GONE);
+            titel.setVisibility(menuZichtbaar);
+        }
+        if (logo != null) {
+            logo.setVisibility(menuZichtbaar);
         }
         zetToetsenbordZichtbaar(false);
         verbergMiniMenu();

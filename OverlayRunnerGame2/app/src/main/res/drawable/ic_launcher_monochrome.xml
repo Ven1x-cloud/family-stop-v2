@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="512"
+    android:viewportHeight="512">
+    <group
+        android:scaleX="0.657829"
+        android:scaleY="0.657829"
+        android:translateX="91.424"
+        android:translateY="93.586"
+        android:pivotX="0" android:pivotY="0">
+      <path android:pathData="M 256.00 78.94 C 261.88 78.94 267.56 81.14 271.89 85.12 C 404.67 206.86 404.67 206.86 404.67 206.86 C 409.00 210.83 411.69 216.28 412.21 222.14 C 412.72 227.99 411.02 233.83 407.45 238.49 C 274.67 411.85 274.67 411.85 274.67 411.85 C 272.47 414.71 269.65 417.04 266.41 418.63 C 263.17 420.23 259.61 421.06 256.00 421.06 C 252.39 421.06 248.83 420.23 245.59 418.63 C 242.35 417.04 239.53 414.71 237.33 411.85 C 237.33 411.85 237.33 411.85 104.55 238.49 C 100.98 233.83 99.28 227.99 99.79 222.14 C 100.31 216.28 103.00 210.83 107.33 206.86 C 107.33 206.86 107.33 206.86 240.11 85.12 C 244.44 81.14 250.12 78.94 256.00 78.94" android:fillColor="#000000"/>
+      <path android:pathData="M 24.00 250.00 a 232.00 232.00 0 1 0 464.00 0 a 232.00 232.00 0 1 0 --464.00 0 Z M 68.00 250.00 a 188.00 188.00 0 1 0 376.00 0 a 188.00 188.00 0 1 0 --376.00 0 Z" android:fillColor="#000000" android:fillType="evenOdd"/>
+      <group>
+        <clip-path android:pathData="M 24.00 250.00 a 232.00 232.00 0 1 0 464.00 0 a 232.00 232.00 0 1 0 --464.00 0 Z"/>
+        <path android:pathData="M -5.63 19.49 L 486.51 511.63 L 517.63 480.51 L 25.49 -11.63 Z" android:fillColor="#000000"/>
+      </group>
+    </group>
+</vector>

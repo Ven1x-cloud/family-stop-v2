@@ -16,9 +16,18 @@
         android:paddingRight="24dp"
         android:paddingBottom="32dp">
 
+        <ImageView
+            android:layout_width="88dp"
+            android:layout_height="88dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="18dp"
+            android:contentDescription="@string/fs_titel"
+            android:src="@drawable/familystop_logo" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:text="@string/fs_titel"
             android:textColor="@color/fs_tekst"
             android:textSize="30sp"
